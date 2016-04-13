@@ -1,9 +1,21 @@
 package models
 
-var Users = map[int]*User{}
-var Seq = 1
+import (
+	"fmt"
+
+	"gopkg.in/mgo.v2/bson"
+)
 
 type User struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	// Account   *Accounts     `json:"account"`
+	ID        bson.ObjectId `json:"id" bson:"_id"`
+	Email     string        `json:"email"`
+	FirstName string        `json:"firstName"`
+	LastName  string        `json:"lastName"`
+	Password  string        `json:"password"`
+	Username  string        `json:"username"`
+}
+
+func (u *User) String() string {
+	return fmt.Sprintf("userID: %s, name: %s, email: %s %s", u.ID, u.FirstName, u.LastName, u.Email)
 }
