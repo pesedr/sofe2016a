@@ -1,9 +1,8 @@
 package models
 
-var Users = map[int]*User{}
-var Seq = 1
+import "gopkg.in/mgo.v2/bson"
 
 type User struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID   bson.ObjectId `json:"id" bson:"_id"`
+	Name string        `json:"name"`
 }

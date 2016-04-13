@@ -1,46 +1,69 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
+
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/labstack/echo"
 	"github.com/pesedr/sofe2016a/models"
+	"github.com/pesedr/sofe2016a/repo"
 )
 
 type UserController struct{}
 
 func (u *UserController) Create(c echo.Context) error {
 	user := &models.User{
-		ID: models.Seq,
+		ID: bson.NewObjectId(),
 	}
+
 	//change this to u instead of user as a bug
-	if err := c.Bind(user); err != nil {
+	err := c.Bind(user)
+	if err != nil {
 		return err
 	}
-	models.Users[user.ID] = user
-	models.Seq++
+
+	user, err = repo.User.Create(user)
+
 	return c.JSON(http.StatusCreated, user)
 
 }
 
 func (u *UserController) Get(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	return c.JSON(http.StatusOK, models.Users[id])
+	id := c.Param("id")
+
+	user, err := repo.User.Get(id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return c.JSON(http.StatusOK, user)
 }
 
 func (u *UserController) Update(c echo.Context) error {
 	user := new(models.User)
-	if err := c.Bind(user); err != nil {
+
+	err := c.Bind(user)
+	if err != nil {
 		return err
 	}
-	id, _ := strconv.Atoi(c.Param("id"))
-	models.Users[id].Name = user.Name
-	return c.JSON(http.StatusOK, models.Users[id])
+
+	id := c.Param("id")
+	user, err = repo.User.Update(id, user)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return c.JSON(http.StatusOK, user)
 }
 
 func (u *UserController) Delete(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	delete(models.Users, id)
+	id := c.Param("id")
+
+	err := repo.User.Delete(id)
+	if err != nil {
+		return err
+	}
 	return c.NoContent(http.StatusNoContent)
 }
