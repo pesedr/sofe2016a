@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
@@ -11,9 +13,25 @@ import (
 func InitServer() {
 	e := echo.New()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	router(e)
 
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "INFO: ${time_rfc3339} method=${method} uri=${uri} status=${status} ",
+		Output: os.Stdout}))
+	e.SetLogPrefix("INFO: ")
+
+	e.Use(middleware.Recover())
+	e.SetHTTPErrorHandler(apiErrorHandler)
+
+	log.Println("Serving on port 3000")
+	e.Run(standard.New(":3001"))
+}
+
+func hello(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!\n")
+}
+
+func router(e *echo.Echo) {
 	// Home
 	e.Get("/", hello)
 
@@ -23,10 +41,4 @@ func InitServer() {
 	e.Get("/users/:id", userController.Get)
 	e.Put("/users/:id", userController.Update)
 	e.Delete("/users/:id", userController.Delete)
-
-	e.Run(standard.New(":1234"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Sup bitch!\n")
 }

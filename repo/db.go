@@ -1,28 +1,30 @@
 package repo
 
 import (
-	"fmt"
+	"log"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-const testDatabase = "test"
+const (
+	testDatabase = "test"
+	mongoPort    = "mongodb://localhost"
+)
 
 func getSession() *mgo.Session {
-	session, err := mgo.Dial("mongodb://localhost")
+	log.Println("Starting mongo session ", "Address: ", mongoPort)
+	session, err := mgo.Dial(mongoPort)
 	if err != nil {
-		fmt.Println("Couldn't connect to db", err)
+		log.Fatalln("Couldn't connect to Database. ", err.Error())
 	}
 
 	return session
 }
 
 func stringIDtoObjectID(id string) (bson.ObjectId, error) {
-
-	//TODO error handling
 	if !bson.IsObjectIdHex(id) {
-		fmt.Println("ID is not mongo objectID")
+		log.Println("ID is not mongo objectID, ", "ID: ", id)
 		return "", nil
 	}
 	return bson.ObjectIdHex(id), nil

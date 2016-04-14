@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"gopkg.in/mgo.v2/bson"
@@ -25,6 +25,9 @@ func (u *UserController) Create(c echo.Context) error {
 	}
 
 	user, err = repo.User.Create(user)
+	if err != nil {
+		c.Error()
+	}
 
 	return c.JSON(http.StatusCreated, user)
 
@@ -35,7 +38,7 @@ func (u *UserController) Get(c echo.Context) error {
 
 	user, err := repo.User.Get(id)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	return c.JSON(http.StatusOK, user)
@@ -52,7 +55,7 @@ func (u *UserController) Update(c echo.Context) error {
 	id := c.Param("id")
 	user, err = repo.User.Update(id, user)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	return c.JSON(http.StatusOK, user)
