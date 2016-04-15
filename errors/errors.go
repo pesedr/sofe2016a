@@ -16,3 +16,7 @@ type ApiError struct {
 	Code        int    `json:"code"`
 	Description string `json:description`
 }
+
+func NewAppError() {
+
+}

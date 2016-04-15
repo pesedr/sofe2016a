@@ -20,8 +20,8 @@ func InitServer() {
 		Output: os.Stdout}))
 	e.SetLogPrefix("INFO: ")
 
+	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.SetHTTPErrorHandler(apiErrorHandler)
 
 	log.Println("Serving on port 3000")
 	e.Run(standard.New(":3001"))

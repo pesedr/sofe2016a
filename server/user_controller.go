@@ -26,7 +26,7 @@ func (u *UserController) Create(c echo.Context) error {
 
 	user, err = repo.User.Create(user)
 	if err != nil {
-		c.Error()
+
 	}
 
 	return c.JSON(http.StatusCreated, user)
