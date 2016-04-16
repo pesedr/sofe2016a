@@ -1,8 +1,8 @@
 package main
 
-import "github.com/pesedr/sofe2016a/routes"
+import "github.com/pesedr/sofe2016a/server"
 
 func main() {
 	//Start server
-	routes.InitServer()
+	server.Config()
 }
