@@ -2,7 +2,6 @@ package server
 
 import (
 	"log"
-	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
@@ -10,18 +9,13 @@ import (
 )
 
 func Config() {
+	log.Println("Creating a new echo service")
 	e := echo.New()
-
-	router(e)
-
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "INFO: ${time_rfc3339} method=${method} uri=${uri} status=${status} ",
-		Output: os.Stdout}))
-	e.SetLogPrefix("INFO: ")
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	router(e)
 	log.Println("Serving on port 3000")
 	e.Run(standard.New(":3001"))
 }

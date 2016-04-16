@@ -20,4 +20,11 @@ func router(e *echo.Echo) {
 	e.Get("/users/:id", userController.Get)
 	e.Put("/users/:id", userController.Update)
 	e.Delete("/users/:id", userController.Delete)
+
+	// Account routes
+	// e.Get("/balance", accountController.GetAccounts)
+}
+
+func serveJSON(c echo.Context, response interface{}) error {
+	return c.JSON(http.StatusOK, response)
 }
