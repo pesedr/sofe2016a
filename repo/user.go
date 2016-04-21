@@ -18,24 +18,29 @@ type UserRepository interface {
 }
 
 type userRepository struct {
-	session *mgo.Session
+	// session *mgo.Session
 }
 
 var User UserRepository
 
-const userCollection = "users"
+// const userCollection = "users"
 
 func (u *userRepository) Create(user *models.User) (*models.User, error) {
-	userCollection := u.collectionFromSession()
+	// userCollection := u.collectionFromSession()
 
 	log.Println("Inserting user into db")
-	err := userCollection.Insert(&user)
-	if err != nil {
-		log.Println("Insert failed", "error:", err.Error())
-		return nil, errors.NewApiError(errors.DatabaseError, fmt.Sprintf("error inserting user into DB, userID %s", user.ID))
+	models.UsersDB[user.ID] = user
+	// err := userCollection.Insert(&user)
+	updatedUser, ok := models.UsersDB[user.ID]
+	if !ok {
+		return nil, errors.NewApiError(errors.DatabaseError, fmt.Sprintf("jijitl"))
 	}
+	// if err != nil {
+	// log.Println("Insert failed", "error:", err.Error())
+	// return nil, errors.NewApiError(errors.DatabaseError, fmt.Sprintf("error inserting user into DB, userID %s", user.ID))
+	// }
 
-	return user, nil
+	return updatedUser, nil
 }
 
 func (u *userRepository) Get(userID string) (*models.User, error) {

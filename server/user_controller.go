@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"gopkg.in/mgo.v2/bson"
-
 	"github.com/labstack/echo"
 	"github.com/pesedr/sofe2016a/errors"
 	"github.com/pesedr/sofe2016a/models"
@@ -17,7 +15,7 @@ type UserController struct{}
 
 func (u *UserController) Create(c echo.Context) error {
 	user := &models.User{
-		ID: bson.NewObjectId(),
+	// ID: bson.NewObjectId(),
 	}
 
 	//change this to u instead of user as a bug

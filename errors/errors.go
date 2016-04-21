@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/labstack/echo"
 )
@@ -31,4 +32,23 @@ var statusCode = map[ErrorCode]int{
 
 func NewApiError(errorCode ErrorCode, msg string) *echo.HTTPError {
 	return echo.NewHTTPError(statusCode[errorCode], fmt.Sprintln(string(errorCode), "message:", msg))
+}
+
+type appError struct {
+	StatusCode          int
+	Description         string
+	MotivationalMessage string
+}
+
+func (e appError) Error() string {
+	log.Println(e.MotivationalMessage)
+	return e.Description
+}
+
+func NewAppErr(errorCode ErrorCode, description, motivationalMessage string) error {
+	return appError{
+		StatusCode:          statusCode[errorCode],
+		MotivationalMessage: motivationalMessage,
+		Description:         description,
+	}
 }
