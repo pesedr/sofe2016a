@@ -32,8 +32,6 @@ Requirements:
 
 *user should not be able to sign up without a balance.
 
-*user should be able to update their username, and log in with their updated username.
-
 *user should be able to add to their balance or substract to their balance.
 
 BONUS: Add unit tests to the methods.
